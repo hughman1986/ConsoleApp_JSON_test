@@ -76,6 +76,15 @@ namespace ConsoleApp_JSON_test
             public string Active22 { get; set; }
 
         }
+
+        public class Account3
+        {
+            public DateTime CreatedDate { get; set; }
+            public IList<string> Roles { get; set; }
+            public string Email { get; set; }
+            public bool Active { get; set; }
+
+        }
         private static void Serialize_and_Deserialize_with_an_Object()
         {
             Console.WriteLine("==Serialize_an_Object");
@@ -101,6 +110,15 @@ namespace ConsoleApp_JSON_test
             string json2 = JsonConvert.SerializeObject(account2, Formatting.Indented);
 
             Console.WriteLine(json2);
+            Console.Write("\n\r");
+
+            // 測試object格式變數的順序不同時會發生甚麼事情  
+            Account3 account3 = JsonConvert.DeserializeObject<Account3>(json);
+            string json3 = JsonConvert.SerializeObject(account3, Formatting.Indented);
+
+            Console.WriteLine(json3);
+            Console.Write("\n\r");
+
         }
 
 
