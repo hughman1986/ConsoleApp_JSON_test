@@ -13,6 +13,10 @@ namespace ConsoleApp_JSON_test
     {
         static void Main(string[] args)
         {
+            Serialize_and_Deserialize_with_an_Object();
+
+
+
             Serialize_an_Object();
 
             Serialize_a_Collection();
@@ -47,7 +51,7 @@ namespace ConsoleApp_JSON_test
             Account account = new Account
             {
                 Email = "james@example.com",
-                Active = true,
+                //Active = true,
                 CreatedDate = new DateTime(2013, 1, 20, 0, 0, 0, DateTimeKind.Utc),
                 Roles = new List<string>
                 {
@@ -61,6 +65,44 @@ namespace ConsoleApp_JSON_test
             Console.Write("\n\r");
 
         }
+
+
+        public class Account2
+        {
+            public string Email { get; set; }
+            //public bool Active { get; set; }
+            public DateTime CreatedDate { get; set; }
+            public IList<string> Roles { get; set; }
+            public string Active22 { get; set; }
+
+        }
+        private static void Serialize_and_Deserialize_with_an_Object()
+        {
+            Console.WriteLine("==Serialize_an_Object");
+
+            Account account = new Account
+            {
+                Email = "james@example.com",
+                Active = true,
+                CreatedDate = new DateTime(2013, 1, 20, 0, 0, 0, DateTimeKind.Utc),
+                Roles = new List<string>
+                {
+                    "User",
+                    "Admin"
+                }
+            };
+
+            string json = JsonConvert.SerializeObject(account, Formatting.Indented);
+            Console.Write(json);
+            Console.Write("\n\r");
+
+            // 測試object格式不同的時候會發生甚麼狀況 
+            Account2 account2 = JsonConvert.DeserializeObject<Account2>(json);
+            string json2 = JsonConvert.SerializeObject(account2, Formatting.Indented);
+
+            Console.WriteLine(json2);
+        }
+
 
         private static void Serialize_a_Collection()
         {
