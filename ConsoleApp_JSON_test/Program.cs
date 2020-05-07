@@ -31,6 +31,8 @@ namespace ConsoleApp_JSON_test
 
             Querying_JSON_with_JSON_Path();
 
+            Serialize_JSON_to_a_file();
+            Deserialize_JSON_from_a_file();
 
             // wait - not to end
             new System.Threading.AutoResetEvent(false).WaitOne();
@@ -278,5 +280,63 @@ namespace ConsoleApp_JSON_test
             Console.Write("\n\r");
 
         }
+
+        private static void Serialize_JSON_to_a_file()
+        {
+            Console.WriteLine("==Serialize_JSON_to_a_file");
+
+            Account account = new Account
+            {
+                Email = "james@example.com",
+                //Active = true,
+                CreatedDate = new DateTime(2013, 1, 20, 0, 0, 0, DateTimeKind.Utc),
+                Roles = new List<string>
+                {
+                    "User",
+                    "Admin"
+                }
+            };
+
+            File.WriteAllText(@"./account.json", JsonConvert.SerializeObject(account, Formatting.Indented));
+
+            List<Account> list_account = new List<Account>();
+            list_account.Add(account);
+            list_account.Add(account);
+
+            // serialize JSON directly to a file
+            using (StreamWriter file = File.CreateText(@"./account_list.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Formatting = Formatting.Indented;
+                serializer.Serialize(file, list_account);
+            }
+        }
+
+
+        private static void Deserialize_JSON_from_a_file()
+        {
+            // read file into a string and deserialize JSON to a type
+            Account Account1 = JsonConvert.DeserializeObject<Account>(File.ReadAllText(@"./account.json"));
+
+            // deserialize JSON directly from a file
+            using (StreamReader file = File.OpenText(@"./account.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                Account Account2 = (Account)serializer.Deserialize(file, typeof(Account));
+            }
+
+            // read file into a string and deserialize JSON to a type
+            List<Account> AccountList1 = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText(@"./account_list.json"));
+
+            // deserialize JSON directly from a file
+            using (StreamReader file = File.OpenText(@"./account_list.json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                List<Account> AccountList2  = (List<Account>)serializer.Deserialize(file, typeof(List<Account>));
+            }
+
+
+        }
+
     }
 }
