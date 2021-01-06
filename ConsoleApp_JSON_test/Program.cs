@@ -34,6 +34,11 @@ namespace ConsoleApp_JSON_test
             Serialize_JSON_to_a_file();
             Deserialize_JSON_from_a_file();
 
+            Serialize_JSON_to_a_file_dictionary_test();
+            Serialize_JSON_to_a_file_dictionary_test();
+
+            Deserialize_JSON_from_a_file_dictionary_test();
+
             // wait - not to end
             new System.Threading.AutoResetEvent(false).WaitOne();
         }
@@ -332,10 +337,33 @@ namespace ConsoleApp_JSON_test
             using (StreamReader file = File.OpenText(@"./account_list.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                List<Account> AccountList2  = (List<Account>)serializer.Deserialize(file, typeof(List<Account>));
+                List<Account> AccountList2 = (List<Account>)serializer.Deserialize(file, typeof(List<Account>));
             }
 
 
+        }
+
+
+
+        private static void Serialize_JSON_to_a_file_dictionary_test()
+        {
+            Console.WriteLine("==Serialize_JSON_to_a_file");
+
+            Dictionary<string, int[]> ScoreTracking_date = new Dictionary<string, int[]>();
+
+            ScoreTracking_date.Add("a", new int[] { 1, 2, 3 });
+            ScoreTracking_date.Add("b", new int[] { 4, 5, 6 });
+            ScoreTracking_date.Add("c", new int[] { 7, 8, 9 });
+
+
+            File.WriteAllText(@"./ScoreTracking_date.json", JsonConvert.SerializeObject(ScoreTracking_date, Formatting.Indented));
+
+        }
+
+        private static void Deserialize_JSON_from_a_file_dictionary_test()
+        {
+            Dictionary<string, int[]> ScoreTracking_date
+                = JsonConvert.DeserializeObject<Dictionary<string, int[]>>(File.ReadAllText(@"./ScoreTracking_date.json"));
         }
 
     }
